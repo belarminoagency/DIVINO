@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4B2E22">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Divino Stories</title>
+<style>html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}*{box-sizing:border-box}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Caveat:wght@600;700&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: identidade Divino Brownie (tema único, claro de baunilha). Coluna de app: boas-vindas em script, frase manuscrita, progresso, ritmo, checklist de stories interativos */
+:root{
+  --cacau:#4B2E22; --caramelo:#B86F3D; --cereja:#A92832; --baunilha:#F7E7D4; --oliva:#7A8060;
+  --bg:#FBF1E6; --surface:#FFFAF4; --fg:#3A231A; --muted:#86695B; --line:#EBD7C3; --done-soft:#E9EBDD;
+  --script:"Kaushan Script", "Brush Script MT", cursive;
+  --hand:"Caveat", "Comic Sans MS", cursive;
+  --body:"Nunito Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme:light;
+}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;overflow-x:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before,body::after{content:"";position:fixed;z-index:0;pointer-events:none;border-radius:58% 42% 63% 37%/45% 55% 45% 55%}
+body::before{width:180px;height:150px;background:var(--caramelo);top:-70px;right:-60px;opacity:.85}
+body::after{width:150px;height:160px;background:var(--cereja);bottom:-80px;left:-70px;opacity:.85}
+.app{position:relative;z-index:1;max-width:480px;margin:0 auto;padding-block:22px 44px;display:flex;flex-direction:column;gap:18px}
+header .date{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-weight:700}
+h1{margin:6px 0 0;font-weight:400;color:var(--cacau);line-height:1.05}
+h1 small{display:block;font-family:var(--body);font-size:13px;font-weight:800;letter-spacing:.35em;text-transform:uppercase;color:var(--caramelo)}
+h1 span{display:block;font-family:var(--script);font-size:38px;line-height:1.2;margin-top:4px}
+h1 i{color:var(--cereja);font-style:normal}
+.quote{background:var(--cacau);color:var(--baunilha);border-radius:22px 22px 22px 6px;padding:16px 20px 18px;position:relative}
+.quote small{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--caramelo);font-weight:800}
+.quote p{font-family:var(--body);font-weight:700;font-size:19px;line-height:1.35;margin:4px 0 0;text-wrap:balance}
+.heart{width:18px;height:18px;color:var(--cereja)}
+.quote .heart{position:absolute;right:16px;top:14px;color:var(--caramelo)}
+.progress{display:flex;align-items:center;gap:14px}
+.ring{width:64px;height:64px;flex:none}
+.ring circle{fill:none;stroke-width:7}
+.ring .track{stroke:var(--line)} .ring .bar{stroke:var(--cereja);stroke-linecap:round;transition:stroke-dashoffset .4s}
+.ring text{fill:var(--cacau);font-family:var(--body);font-weight:800;font-size:16px}
+.progress .txt{min-width:0}
+.progress strong{font-size:17px;font-weight:800;color:var(--cacau);display:block}
+.progress span{color:var(--muted);font-size:13.5px}
+.next{display:flex;gap:10px;align-items:center;background:var(--baunilha);border:1px solid var(--line);border-radius:16px;padding:12px 14px;font-size:14px}
+.next b{color:var(--cereja);font-variant-numeric:tabular-nums}
+.next.late{background:var(--cereja);border-color:var(--cereja);color:#fff}
+.next.late b{color:#fff}
+.bell{width:20px;height:20px;flex:none;color:var(--cereja)}
+.next.late .bell{color:#fff}
+.head2{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:8px 0 -6px}
+h2{font-family:var(--body);font-weight:800;font-size:20px;color:var(--cacau);margin:0;line-height:1}
+.rhythm{font-size:12px;font-weight:800;color:var(--caramelo);white-space:nowrap}
+.note{margin:0;font-size:13.5px;color:var(--muted);border-left:3px solid var(--caramelo);padding-left:10px}
+ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+li{background:var(--surface);border:1px solid var(--line);border-radius:18px;transition:background .2s,border-color .2s}
+li.on{background:var(--done-soft);border-color:transparent}
+.row{display:flex;gap:12px;align-items:flex-start;padding:14px;cursor:pointer;width:100%;text-align:left;border:0;background:none;color:inherit;font:inherit}
+.row:focus-visible{outline:2px solid var(--cereja);outline-offset:-2px;border-radius:18px}
+.body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.chip{align-self:flex-start;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;padding:3px 9px;border-radius:999px}
+.body b{font-family:var(--body);font-size:17px;font-weight:800;line-height:1.25;color:var(--cacau)}
+li.on .body b{text-decoration:line-through;text-decoration-color:var(--oliva);opacity:.6}
+.body p{margin:0;font-size:13.5px;color:var(--muted)}
+.ex{font-size:13px;background:var(--baunilha);border-radius:10px;padding:6px 10px;color:var(--fg)}
+.ex em{font-style:normal;font-weight:800;color:var(--caramelo);margin-right:4px}
+li.on .ex{display:none}
+.when{font-size:12px;color:var(--oliva);font-weight:800}
+.check{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;transition:.2s;margin-top:2px}
+li.on .check{background:var(--oliva);border-color:var(--oliva)}
+.check svg{width:14px;height:14px;stroke:#fff;opacity:0}
+li.on .check svg{opacity:1}
+.ideas-wrap{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.ideas{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.irow{display:grid;grid-template-columns:92px minmax(0,1fr);border-top:1px solid var(--line)}
+.irow:first-child{border-top:0}
+.itype{padding:14px 10px 14px 14px;background:var(--baunilha)}
+.itype .chip{font-size:10px;padding:3px 8px}
+.ilist{padding:12px 14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.idea b{display:block;font-size:15px;font-weight:800;color:var(--cacau);line-height:1.3}
+.idea p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.idea .ex{display:block;margin-top:6px}
+.dot{width:12px;height:12px;border-radius:50%;flex:none;margin-top:6px}
+.streak{text-align:center;font-size:13.5px;color:var(--muted)}
+.streak b{color:var(--cacau)}
+.done-msg{text-align:center;font-family:var(--body);font-weight:800;color:var(--cereja);font-size:18px}
+footer{text-align:center;font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="date" id="date"></div>
+    <h1><small>Divino Brownie</small><span>Bem-vindos, <i>Natan e Ester</i></span></h1>
+  </header>
+
+  <section class="quote" aria-label="Frase do dia">
+    <svg class="heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.4-9.1C1.2 8.3 3.4 4.5 7.1 4.5c2 0 3.6 1.1 4.9 2.8 1.3-1.7 2.9-2.8 4.9-2.8 3.7 0 5.9 3.8 4.5 7.4C19.5 16.4 12 21 12 21z"/></svg>
+    <small>Frase do dia</small>
+    <p id="quote"></p>
+  </section>
+
+  <section class="progress">
+    <svg class="ring" viewBox="0 0 64 64" aria-hidden="true">
+      <circle class="track" cx="32" cy="32" r="27"/>
+      <circle class="bar" id="bar" cx="32" cy="32" r="27" transform="rotate(-90 32 32)"/>
+      <text id="pct" x="32" y="38" text-anchor="middle">0</text>
+    </svg>
+    <div class="txt">
+      <strong id="count">0 de 6 stories</strong>
+      <span id="hint">Bora começar o dia.</span>
+    </div>
+  </section>
+
+  <div class="next" id="next">
+    <svg class="bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+    <div id="nextTxt"></div>
+  </div>
+
+  <div class="head2"><h2>Checklist de hoje</h2><span class="rhythm">1 a cada 2h–3h</span></div>
+  <ul id="list"></ul>
+
+  <div class="done-msg" id="doneMsg" hidden>Dia completo! Os clientes viram vocês hoje.</div>
+  <div class="streak" id="streak"></div>
+
+  <section class="ideas-wrap" aria-labelledby="ideasTitle">
+    <div class="head2"><h2 id="ideasTitle">Ideias de hoje</h2></div>
+    <p class="note">As ideias são só sugestões. Podem fazer do jeito de vocês, o importante é postar!</p>
+    <div class="ideas" id="ideas"></div>
+  </section>
+  <footer>Sabores reais · Petrópolis RJ · por belarmino agency</footer>
+</div>
+
+<script>
+/* Figurinhas do Instagram e suas cores */
+const ST={
+  "Enquete":"var(--cereja)","Quiz":"var(--caramelo)","Caixinha":"var(--oliva)",
+  "Slider":"var(--cacau)","Link":"var(--cereja)","Contagem":"var(--caramelo)","Reação":"var(--oliva)"
+};
+/* 6 momentos do dia; todo dia o app escolhe uma ideia de cada */
+const POOLS=[
+  [{s:"Enquete",t:"Bom dia, docinhos",d:"Foto da vitrine pela manhã.",ex:"\"Já tomou café?\" Sim / Agora com brownie"},
+   {s:"Slider",t:"Termômetro da vontade",d:"Brownie bem de perto, com o slider de coração.",ex:"\"Quanta vontade de brownie hoje?\""},
+   {s:"Enquete",t:"Qual o humor de hoje?",d:"Dois sabores lado a lado representando o humor.",ex:"Dia de Nutella / Dia de Ninho"},
+   {s:"Caixinha",t:"Bom dia com pedido",d:"Loja abrindo, luz da manhã.",ex:"\"Pra quem vai o primeiro brownie de hoje?\""},
+   {s:"Enquete",t:"Café da manhã ou sobremesa?",d:"Brownie ao lado de uma xícara de café.",ex:"Brownie no café / Só depois do almoço"},
+   {s:"Quiz",t:"Qual saiu primeiro hoje?",d:"Vitrine com todos os sabores do dia.",ex:"Três sabores como opção, depois revelem"},
+   {s:"Caixinha",t:"Como está o dia de vocês?",d:"Selfie de vocês abrindo a loja.",ex:"\"Conta pra gente como começou seu dia\""},
+   {s:"Slider",t:"Nível de fome",d:"Foto do balcão cheio logo cedo.",ex:"\"Qual seu nível de fome agora?\""},
+   {s:"Enquete",t:"Doce ou salgado de manhã?",d:"Brownie em destaque com luz natural.",ex:"Time doce / Time salgado"},
+   {s:"Contagem",t:"Fornada fresquinha",d:"Avisem que uma fornada sai daqui a pouco.",ex:"Contagem regressiva para a fornada sair"}],
+  [{s:"Quiz",t:"Adivinha o recheio?",d:"Brownie inteiro, sem mostrar o corte.",ex:"Ninho / Nutella / Doce de leite. Depois postem o corte!"},
+   {s:"Slider",t:"Se liga nessa textura",d:"Vídeo do brownie sendo partido ao meio.",ex:"\"De 0 a apaixonado, quanto?\""},
+   {s:"Quiz",t:"Quanto tempo no forno?",d:"Forma saindo do forno, som ligado.",ex:"15 min / 25 min / 40 min"},
+   {s:"Caixinha",t:"Hoje na produção",d:"Vídeo curto da massa ou do chocolate derretendo.",ex:"\"O que vocês querem ver a gente fazendo?\""},
+   {s:"Enquete",t:"Mais chocolate ou mais recheio?",d:"Vídeo montando o brownie.",ex:"Mais chocolate / Mais recheio"},
+   {s:"Quiz",t:"Quantos saem por forma?",d:"Forma inteira antes do corte.",ex:"8 / 12 / 20"},
+   {s:"Slider",t:"Som do corte",d:"Vídeo com o som da faca cortando a casquinha.",ex:"\"Esse barulhinho é...\" com slider"},
+   {s:"Caixinha",t:"Ingrediente secreto",d:"Mostrem um ingrediente sem dizer qual é.",ex:"\"Chuta qual é o ingrediente secreto\""},
+   {s:"Enquete",t:"Lambe a colher?",d:"Colher com massa de chocolate em close.",ex:"Claro que lambo / Nunca"},
+   {s:"Reação",t:"Antes e depois",d:"Massa crua e brownie pronto, lado a lado.",ex:"Reação de coração ou de fogo"}],
+  [{s:"Enquete",t:"Qual você escolhe?",d:"Brownie recheado e Copo dos Sonhos lado a lado.",ex:"Brownie recheado / Copo dos Sonhos"},
+   {s:"Caixinha",t:"Quanto você acha que custa?",d:"Close do produto, preço só no próximo story.",ex:"\"Chuta um valor!\" e depois revelem"},
+   {s:"Enquete",t:"Este ou aquele",d:"Dois sabores em destaque.",ex:"Nutella / Ninho"},
+   {s:"Slider",t:"Nota para o lançamento",d:"Sabor novo ou da semana em destaque.",ex:"\"Que nota vocês dão pra esse?\""},
+   {s:"Quiz",t:"Qual é o mais pedido?",d:"Três sabores lado a lado.",ex:"Revelem o campeão de vendas no story seguinte"},
+   {s:"Enquete",t:"Quente ou gelado?",d:"Brownie com e sem sorvete.",ex:"Quentinho / Com sorvete"},
+   {s:"Slider",t:"Copo dos Sonhos",d:"Vídeo montando o copo, camada por camada.",ex:"\"Quanto você quer esse copo?\""},
+   {s:"Caixinha",t:"Combina com o quê?",d:"Brownie sozinho no prato.",ex:"\"Com o que você comeria esse?\""},
+   {s:"Enquete",t:"Pra dividir ou só pra mim?",d:"Caixa com vários brownies.",ex:"Divido / Nem pensar"},
+   {s:"Quiz",t:"Qual recheio é esse?",d:"Close do recheio escorrendo.",ex:"Três opções de recheio"}],
+  [{s:"Caixinha",t:"Caixinha de perguntas",d:"Foto de vocês na loja.",ex:"\"Perguntem qualquer coisa sobre a Divino\""},
+   {s:"Caixinha",t:"Complete a frase",d:"Fundo baunilha com a frase em letra de mão.",ex:"\"Brownie bom é aquele que...\""},
+   {s:"Caixinha",t:"Sabor dos sonhos",d:"Ideia para um sabor novo vindo dos clientes.",ex:"\"Qual sabor a gente deveria lançar?\""},
+   {s:"Reação",t:"Respondendo vocês",d:"Respondam em vídeo uma pergunta da última caixinha.",ex:"Natan ou Ester falando 15 segundos"},
+   {s:"Caixinha",t:"Indique alguém",d:"Fundo baunilha com a pergunta.",ex:"\"Marque quem merece um brownie hoje\""},
+   {s:"Enquete",t:"O que vocês querem ver?",d:"Pergunta sobre os próximos stories.",ex:"Mais bastidores / Mais lançamentos"},
+   {s:"Caixinha",t:"Hora do brownie",d:"Foto de alguém comendo.",ex:"\"Qual o melhor momento pra um brownie?\""},
+   {s:"Quiz",t:"Conhece a Divino?",d:"Pergunta sobre a história de vocês.",ex:"\"Há quanto tempo a Divino existe?\""},
+   {s:"Caixinha",t:"Conta uma história",d:"Story pedindo lembranças dos clientes.",ex:"\"Pra quem você já deu um brownie de presente?\""},
+   {s:"Reação",t:"Um dia na Divino",d:"Sequência rápida de momentos da loja.",ex:"Peçam reação para saber se querem mais"}],
+  [{s:"Reação",t:"Pedido real",d:"Pedido sendo embalado ou entregue.",ex:"\"Mais um cliente feliz!\" com reação de coração"},
+   {s:"Enquete",t:"O que dizem sobre nós?",d:"Print de um elogio (com permissão do cliente).",ex:"\"Concorda?\" Sim / Ainda vou provar"},
+   {s:"Reação",t:"Repost de cliente",d:"Compartilhe uma marcação recebida.",ex:"Agradeçam marcando o cliente de volta"},
+   {s:"Enquete",t:"Aqui tem Divino",d:"Natan ou Ester no balcão, mostrando o rosto.",ex:"\"Já provou?\" Já sou fã / Ainda não"},
+   {s:"Reação",t:"Cliente de sempre",d:"Mostrem um cliente fiel (com permissão).",ex:"\"Esse aqui não perde uma fornada!\""},
+   {s:"Enquete",t:"Já marcou a gente?",d:"Print das marcações da semana.",ex:"Já marquei / Vou marcar hoje"},
+   {s:"Slider",t:"Primeira mordida",d:"Vídeo de um cliente provando (com permissão).",ex:"\"Nível da reação\""},
+   {s:"Caixinha",t:"Opinião sincera",d:"Fundo cacau com estrelinhas.",ex:"\"Deixa aqui sua avaliação\""},
+   {s:"Reação",t:"Presente Divino",d:"Caixa embalada para presente.",ex:"\"Quem você presentearia?\" com reação"},
+   {s:"Enquete",t:"Quem já pediu delivery?",d:"Pedido saindo para entrega.",ex:"Já pedi / Ainda vou pedir"}],
+  [{s:"Link",t:"Peça o seu",d:"Caixa da Divino em destaque.",ex:"Figurinha de link para o WhatsApp"},
+   {s:"Contagem",t:"Encomendas abertas",d:"Avisem até quando aceitam pedidos.",ex:"Contagem regressiva para o fim das encomendas"},
+   {s:"Enquete",t:"Últimas unidades",d:"Mostrem o que sobrou do dia.",ex:"\"Vai querer?\" Eu quero! / Amanhã"},
+   {s:"Link",t:"Boa noite, docinhos",d:"Agradeçam o dia e lembrem como pedir.",ex:"Link do WhatsApp para pedidos de amanhã"},
+   {s:"Link",t:"Cardápio completo",d:"Todos os sabores em um story.",ex:"Link para o WhatsApp"},
+   {s:"Contagem",t:"Fim de semana chegando",d:"Caixa de brownies pronta para levar.",ex:"Contagem regressiva para o fim de semana"},
+   {s:"Enquete",t:"Encomenda pro fim de semana?",d:"Foto de uma caixa grande.",ex:"Quero encomendar / Ainda não"},
+   {s:"Link",t:"Kit presente",d:"Kit ou caixa especial em destaque.",ex:"Link do WhatsApp: \"Quero o kit\""},
+   {s:"Quiz",t:"Como pedir?",d:"Story explicando delivery e retirada.",ex:"WhatsApp / Direct / Na loja (todas certas!)"},
+   {s:"Contagem",t:"Sabor do dia acabando",d:"Poucas unidades na vitrine.",ex:"Contagem até a loja fechar"}]
+];
+const QUOTES=[
+  "Quem é visto todo dia é lembrado na hora da vontade de doce.",
+  "Um story simples postado vale mais que um perfeito que ficou no rascunho.",
+  "O cliente compra o brownie, mas volta pela história de vocês.",
+  "Constância vence talento que não aparece.",
+  "Cada fornada é conteúdo. Mostrem o que vocês já fazem tão bem.",
+  "Pequeno negócio com presença diária vira marca grande na cidade.",
+  "Hoje é dia de lembrar Petrópolis de que vocês existem.",
+  "Não precisa ter mil seguidores. Precisa ter os certos voltando.",
+  "Quem mostra o processo ganha a confiança antes da primeira mordida.",
+  "Um bom dia nos stories abre a porta da loja.",
+  "Feito com carinho merece ser mostrado com orgulho.",
+  "O algoritmo gosta de quem conversa. O cliente também.",
+  "Cada enquete respondida é um cliente conversando com vocês.",
+  "Mais que um doce, é um momento Divino.",
+  "Dia corrido? Um story de 10 segundos já conta.",
+  "A melhor propaganda é o cliente feliz marcando vocês.",
+  "Vocês não vendem só brownie, vendem o melhor pedaço do dia de alguém.",
+  "Rotina de postar é igual a receita: segue certinho que dá certo.",
+  "Sabores reais, gente real, resultado real.",
+  "Quem pede uma vez e vê vocês todo dia, pede de novo.",
+  "Hoje vale mais feito do que perfeito.",
+  "O sucesso de amanhã está no story que vocês postam hoje.",
+  "Cada seguidor novo é um vizinho que ainda não provou.",
+  "Mostrem o rosto. As pessoas compram de pessoas.",
+  "Divino não é só o nome, é o padrão.",
+  "Um dia de cada vez, um story de cada vez.",
+  "Qualidade em cada pedacinho, presença em cada dia.",
+  "Negócio que se mostra é negócio que se encontra.",
+  "Hoje tem fornada nova e história nova para contar.",
+  "Pequenos hábitos diários constroem grandes vendas.",
+  "Todo grande sonho começou com uma primeira fornada.",
+  "Quem posta hoje colhe pedidos amanhã.",
+  "O Instagram é a vitrine que nunca fecha.",
+  "Cada story é um convite para alguém entrar na loja.",
+  "Chocolate bom e presença constante: receita de sucesso.",
+  "Mostrar o dia a dia é o que cria fã, não só cliente.",
+  "Hoje alguém vai lembrar de vocês por causa de um story.",
+  "O cliente que responde a enquete já está meio dentro da loja.",
+  "Sorriso no balcão, sorriso nos stories.",
+  "Vocês fazem brownie com amor. Deixem a cidade ver isso.",
+  "Presença não se compra, se constrói um dia de cada vez.",
+  "Uma marca forte é feita de pequenos momentos repetidos.",
+  "Quem conversa com o cliente nunca fica sem assunto.",
+  "Quando der preguiça, lembrem: um story leva um minuto.",
+  "O melhor marketing é mostrar o que vocês fazem bem.",
+  "Conexão vende mais que propaganda.",
+  "A vontade de doce aparece do nada. Estejam lá quando ela vier.",
+  "Cada pergunta respondida aproxima mais um cliente.",
+  "Brownie bom se espalha. Story bom também.",
+  "Os clientes querem ver quem está por trás do doce.",
+  "Hoje é um ótimo dia para alguém descobrir a Divino.",
+  "Quem aparece com frequência vira referência.",
+  "Detalhe de hoje, venda de amanhã.",
+  "Não esperem a foto perfeita. Esperem o cliente feliz.",
+  "O caminho até a venda passa pela conversa.",
+  "Dia bom é dia com forno quente e stories no ar.",
+  "Cada marcação de cliente é uma indicação de graça.",
+  "Pequenos passos todo dia levam longe.",
+  "A Divino tem história. Contem um pedacinho dela hoje.",
+  "Doce feito com capricho merece ser visto por todo mundo."
+];
+const now=new Date();
+const key=d=>d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+const today=key(now);
+const load=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const isDone=s=>s&&Array.isArray(s.done)&&s.done.every(Boolean);
+let st=load("dv2-"+today);
+if(!st||!Array.isArray(st.done)) st={done:POOLS.map(()=>null),last:null};
+
+document.getElementById("date").textContent=now.toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"});
+const doy=Math.floor((now-new Date(now.getFullYear(),0,0))/864e5);
+document.getElementById("quote").textContent=QUOTES[doy%QUOTES.length];
+const TYPES=[
+  {s:"Enquete",d:"Duas opções para o seguidor votar."},
+  {s:"Quiz",d:"Uma pergunta com resposta certa."},
+  {s:"Caixinha",d:"Pergunta aberta para o seguidor escrever."},
+  {s:"Slider",d:"Barrinha de emoji para medir a vontade."},
+  {s:"Reação",d:"Cliente, pedido real ou repost com reação."},
+  {s:"Link",d:"Link do WhatsApp ou contagem regressiva para pedir."}
+];
+const TODAY=TYPES;
+const ALL=POOLS.flat().map(x=>({...x,g:x.s==="Contagem"?"Link":x.s}));
+const IDEAS=TYPES.map((t,i)=>{const g=ALL.filter(x=>x.g===t.s);const a=(doy*2)%g.length;return {t,list:[g[a],g[(a+1)%g.length]]}});
+const hhmm=ts=>new Date(ts).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+
+const list=document.getElementById("list");
+const tick='<svg viewBox="0 0 24 24" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+TODAY.forEach((it,i)=>{
+  const li=document.createElement("li");
+  li.innerHTML=`<button class="row" id="item-${i}" aria-pressed="false"><span class="dot" style="background:${ST[it.s]}"></span><span class="body"><b>${it.s}</b><p>${it.d}</p><span class="when"></span></span><span class="check">${tick}</span></button>`;
+  li.querySelector("button").addEventListener("click",()=>{
+    st.done[i]=st.done[i]?null:Date.now();
+    const times=st.done.filter(Boolean); st.last=times.length?Math.max(...times):null;
+    save("dv2-"+today,st); render();
+  });
+  list.appendChild(li);
+});
+
+document.getElementById("ideas").innerHTML=IDEAS.map(r=>`<div class="irow"><div class="itype"><span class="chip" style="background:${ST[r.t.s]}">${r.t.s}</span></div><div class="ilist">${r.list.map(x=>`<div class="idea"><b>${x.t}</b><p>${x.d}</p><span class="ex"><em>Ex.:</em>${x.ex}</span></div>`).join("")}</div></div>`).join("");
+const C=2*Math.PI*27, bar=document.getElementById("bar");
+bar.style.strokeDasharray=C;
+function streak(){
+  let n=0,d=new Date(now);
+  if(!st.done.every(Boolean)) d.setDate(d.getDate()-1);
+  while(isDone(load("dv2-"+key(d)))){n++;d.setDate(d.getDate()-1)}
+  return n;
+}
+function fmt(min){const h=Math.floor(min/60),m=min%60;return h?(h+"h"+(m?String(m).padStart(2,"0"):"")):m+" min"}
+function render(){
+  const n=st.done.filter(Boolean).length,tot=TODAY.length;
+  [...list.children].forEach((li,i)=>{
+    const on=!!st.done[i];
+    li.classList.toggle("on",on);
+    li.querySelector("button").setAttribute("aria-pressed",on);
+    li.querySelector(".when").textContent=on?"Postado às "+hhmm(st.done[i]):"";
+  });
+  bar.style.strokeDashoffset=C*(1-n/tot);
+  document.getElementById("pct").textContent=Math.round(n/tot*100)+"%";
+  document.getElementById("count").textContent=n+" de "+tot+" stories";
+  document.getElementById("hint").textContent=n===0?"Bora começar o dia.":n===tot?"Dia completo!":n>=tot/2?"Mais da metade. Continuem!":"Bom começo, sigam no ritmo.";
+  document.getElementById("doneMsg").hidden=n!==tot;
+  const box=document.getElementById("next"),el=document.getElementById("nextTxt");
+  box.classList.remove("late");
+  if(n===tot) el.innerHTML="Tudo postado por hoje. Amanhã tem ideias novas.";
+  else if(!st.last) el.innerHTML="Nenhum story ainda hoje. <b>Postem o primeiro</b> e marquem aqui.";
+  else{
+    const since=Math.floor((Date.now()-st.last)/6e4);
+    if(since>=180){box.classList.add("late");el.innerHTML="Último story há <b>"+fmt(since)+"</b>. Hora de postar o próximo!";}
+    else if(since>=120) el.innerHTML="Último story há <b>"+fmt(since)+"</b>. Já dá para postar o próximo.";
+    else el.innerHTML="Último story há <b>"+fmt(since)+"</b>. Próximo em <b>"+fmt(120-since)+"</b>.";
+  }
+  const s=streak();
+  document.getElementById("streak").innerHTML=s>0?"<b>"+s+(s>1?" dias seguidos":" dia")+"</b> com o checklist completo":"Completem o checklist hoje para começar a sequência.";
+}
+render();
+setInterval(render,60000);
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}
+</script>
+</body>
+</html>
